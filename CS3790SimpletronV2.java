@@ -14,15 +14,10 @@ import java.util.*;
  */
 public class CS3790SimpletronV2 {
 
-    public int[] memory = new int[10000];
-    //  int accumulator, instruction_counter, instruction_registerm, index_register;
-
+    public static int[] memory = new int[10000];
+    
     public CS3790SimpletronV2() {
-        print("*** Welcome to Simpletron V2! ***");
-        print("***");
 
-//        this.instruction_counter = instruction_counter;
-//        this.instruction_registerm = instruction_register;
     }
 
     public static void print(String x) {
@@ -36,24 +31,31 @@ public class CS3790SimpletronV2 {
     
      */
     public void load_program() {
+        print("*** Welcome to Simpletron V2! ***");
+        print("***");
         Scanner input = new Scanner(System.in);
-        print("Do you have a file that contains your SML program (Y/N) ?");
-        String anwser = input.next().toUpperCase().trim();
-        System.out.println();
+        boolean loading = true;
+        while (loading) {
+            print("Do you have a file that contains your SML program (Y/N) ?");
+            String anwser = input.next().toUpperCase().trim();
+            System.out.println();
 
-        if (anwser.equals("Y")) {
-            print("What is the filename?");
-            input.nextLine();
-            String filename = input.nextLine().trim();
-            load_PRG_file(filename);
+            if (anwser.equals("Y")) {
+                print("What is the filename?");
+                input.nextLine();
+                String filename = input.nextLine().trim();
+                load_PRG_file(filename);
+                loading = false;
+                
+            } else if (anwser.equals("N")) {
+                System.out.println("*** Please enter your program one instruction( or data word ) at a time        ***");
+                System.out.println("*** I will type the location number and a question mark (?). You then          ***");
+                System.out.println("*** type the word for that location. Type the word GO to execute  your program ***");
+                read_keyboard();
+                loading = false;
+            }
 
-        } else if (anwser.equals("N")) {
-            System.out.println("*** Please enter your program one instruction( or data word ) at a time        ***");
-            System.out.println("*** I will type the location number and a question mark (?). You then          ***");
-            System.out.println("*** type the word for that location. Type the word GO to execute  your program ***");
-            read_keyboard();
         }
-
     }
 
     /* this function takes in the file name and saves it to the memory while the file has a next line
@@ -76,16 +78,17 @@ takes in the input in as a string and convertes it to an int with Integer.parseI
                 if (!line.isEmpty()) {
                     try {
                         int sml_code = Integer.parseInt(line);
-                        memory[address] = sml_code;
+                        memory[address] = Math.abs(sml_code);
                         address++;
                     } catch (NumberFormatException e) {
-                        //dumpCore(); 
+                        // dumpCore(); 
 
                     }
 
                 }
 
             }
+            System.out.println();
             file_scan.close();
         } catch (FileNotFoundException e) {
             System.out.println("Dump");
@@ -115,37 +118,32 @@ takes in the input in as a string and convertes it to an int with Integer.parseI
 
             try {
                 int sml_code = Integer.parseInt(keys);
-                memory[address] = sml_code;
+                
+                memory[address] = Math.abs(sml_code);
                 address++;
             } catch (NumberFormatException e) {
-                //dumpCore(); 
+                //dumpCore(00000); 
 
             }
 
         }
+            // Debug: print loaded memory
+    for (int i = 0; i < address; i++) {
+        System.out.printf("Memory[%05d] = %06d\n", i, memory[i]);
     }
 
-    public static int string_int(String string) {
-        int value = 0;
-        try {
-            value = Integer.parseInt(string);
-
-        } catch (NumberFormatException e) {
-            //dumpCore(); 
-
-        }
-        return value;
+    print("Program loaded from keyboard input.");
     }
+
+  
 
     public static void main(String[] args) {
         CS3790SimpletronV2 SimpletronV2 = new CS3790SimpletronV2();
+        memory[1000]=1005;
         SimpletronV2.load_program();
-//        CPU cpu = new CPU();
-//        cpu.exeSML();
+        CPU cpu = new CPU();
+        cpu.exeSML();
 
-        for (int i = 0; i < 10; i++) {
-            System.out.println(SimpletronV2.memory[i]);
-        }
     }
 
 }
