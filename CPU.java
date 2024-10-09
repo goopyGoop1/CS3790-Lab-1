@@ -11,7 +11,7 @@ package CS3790SimpletronV2;
 import java.util.Scanner;
 
 public class CPU extends CS3790SimpletronV2 {
-
+// registers
     int accumulator = 0;
     int instructionCounter = 0;
     int instructionRegister = 0;
@@ -29,7 +29,7 @@ public class CPU extends CS3790SimpletronV2 {
 
                 instructionRegister = memory[instructionCounter];
 
-                int op_code = instructionRegister / 10000; // gives first 2 words
+                int op_code = Math.abs(instructionRegister / 10000); // gives first 2 words
 
                 int operand = instructionRegister % 10000; // gives last 4 words
 
@@ -110,12 +110,12 @@ public class CPU extends CS3790SimpletronV2 {
 
             }
         } catch (IllegalArgumentException e) {
-            dumpCore(01);
+            dumpCore(01); // dump core if bad op code 
         }
     }
 
     public void read(int operand) {
-        // System.out.println("This is read the operand is " + operand);
+        
         Scanner input = new Scanner(System.in);
         System.out.print("?");
 

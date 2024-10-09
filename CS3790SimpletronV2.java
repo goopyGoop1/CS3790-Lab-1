@@ -77,7 +77,7 @@ takes in the input in as a string and convertes it to an int with Integer.parseI
                 if (!line.isEmpty()) {
                     try {
                         int sml_code = Integer.parseInt(line);
-                        memory[address] = Math.abs(sml_code);
+                        memory[address] = sml_code;
                         address++;
                     } catch (NumberFormatException e) {
 
