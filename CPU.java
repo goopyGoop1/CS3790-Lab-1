@@ -27,15 +27,11 @@ public class CPU extends CS3790SimpletronV2 {
 
             while (true) {
 
-               // System.out.println("This is the IC  " + instructionCounter);
                 instructionRegister = memory[instructionCounter];
-                // System.out.println(instructionCounter);
 
                 int op_code = instructionRegister / 10000; // gives first 2 words
-                //System.out.println("This is the OP CODE "+ op_code);
+
                 int operand = instructionRegister % 10000; // gives last 4 words
-                //System.out.println("This is the Operand  " + operand);
-                // System.out.println("This is the indexREG b4 the switch "+ indexRegister);
 
                 switch (op_code) {
                     case Operation_Instruction.READ:
@@ -114,12 +110,12 @@ public class CPU extends CS3790SimpletronV2 {
 
             }
         } catch (IllegalArgumentException e) {
-            //dumpCore(operand);
+            dumpCore(01);
         }
     }
 
     public void read(int operand) {
-       // System.out.println("This is read the operand is " + operand);
+        // System.out.println("This is read the operand is " + operand);
         Scanner input = new Scanner(System.in);
         System.out.print("?");
 
@@ -132,218 +128,216 @@ public class CPU extends CS3790SimpletronV2 {
             memory[operand] = value;
 
         } catch (NumberFormatException e) {
-            
+
         }
+
         instructionCounter++;
 
     }
 
     public void write(int operand) {
-       // System.out.println("This is write the operand is " + operand);
+
         System.out.println(memory[operand]);
         instructionCounter++;
-        // dumpCore(0);
+
     }
 
     public void load(int operand) {
-       // System.out.println("This is load the operand is " + operand);
+
         accumulator = memory[operand];
 
-        //System.out.println("This is the accumulator " + accumulator);
         instructionCounter++;
-        //dumpCore(0);
+
     }
 
     public void loadIM(int operand) {
-        //System.out.println("This is loadIM the operand is " + operand);
+
         accumulator = operand; // Load the immediate operand into the accumulator
         instructionCounter++;
-        //dumpCore(0);
+
     }
 
     public void loadX(int operand) {
-       // System.out.println("This is loadX the operand is " + operand);
+
         indexRegister = memory[operand];
         instructionCounter++;
-       // dumpCore(0);
 
     }
 
     public void loadIDX(int operand) {
-        //System.out.println("This is loadIDX the operand is " + operand);
+
         if (indexRegister >= 0 && indexRegister < memory.length) {
             accumulator = memory[indexRegister];
-          //dumpCore(0);
+
         } else {
             dumpCore(operand);  // Invalid memory access
         }
         instructionCounter++;
-       //dumpCore(0);
+
     }
 
     public void store(int operand) {
-       // System.out.println("This is store the operand is " + operand);
+
         memory[operand] = accumulator;
         instructionCounter++;
-        //dumpCore(0);
+        
     }
 
     public void storeIDX(int operand) {
-        //System.out.println("This is storeIDX the operand is " + operand);
+
         if (indexRegister >= 0 && indexRegister < memory.length) {
             memory[indexRegister] = accumulator;
         } else {
             dumpCore(operand);  // Invalid memory access
         }
         instructionCounter++;
-        //dumpCore(0);
 
     }
 
     public void add(int operand) {
-        //System.out.println("This is add the operand is " + operand);
+
         accumulator += memory[operand];
         instructionCounter++;
-        //dumpCore(10);
+
         if (accumulator < -999999 || accumulator > 99999) {
-            accumulator = -1;
+            accumulator = -1; // Checking for overflow 
             dumpCore(operand);
         }
 
     }
 
     public void addX(int operand) {
-       // System.out.println("This is addX the operand is " + operand);
+
         accumulator += memory[indexRegister];
         instructionCounter++;
-        //dumpCore(0);
+        if (accumulator < -999999 || accumulator > 99999) {
+            accumulator = -1; // Checking for overflow
+            dumpCore(operand);
+        }
 
     }
 
     public void subtract(int operand) {
-       // System.out.println("This is sub the operand is " + operand);
+
         accumulator -= memory[operand];
         instructionCounter++;
-        //dumpCore(10);
+
         if (accumulator < -999999 || accumulator > 99999) {
-            accumulator = -1;
+            accumulator = -1;// Checking for overflow
             dumpCore(operand);
         }
 
     }
 
     public void subtractX(int operand) {
-        //System.out.println("This is subX the operand is " + operand);
+
         accumulator -= memory[indexRegister];
         instructionCounter++;
-        //dumpCore(0);
+
         if (accumulator < -999999 || accumulator > 99999) {
-            accumulator = -1;
+            accumulator = -1;// Checking for overflow
             dumpCore(operand);
         }
 
     }
 
     public void divide(int operand) {
-       // System.out.println("This is divide the operand is " + operand);
+
         if (memory[operand] == 0) {
-            accumulator = -2;
+            accumulator = -2; // divide by 0 check 
 
             dumpCore(operand);
         } else {
             accumulator /= memory[operand];
             instructionCounter++;
-           // dumpCore(0);
+
         }
     }
 
     public void divideX(int operand) {
-        //System.out.println("This is diviedX the operand is " + operand);
+
         if (memory[indexRegister] == 0) {
-            accumulator = -2;
+            accumulator = -2; // didvide by 0 check 
             dumpCore(operand);
         } else {
             accumulator /= memory[indexRegister];
             instructionCounter++;
-           // dumpCore(0);
+
         }
 
     }
 
     public void multiply(int operand) {
-       // System.out.println("This is multi the operand is " + operand);
+
         accumulator *= memory[operand];
         instructionCounter++;
         if (accumulator < -999999 || accumulator > 99999) {
-            accumulator = -1;
+            accumulator = -1; // Checking for overflow
             dumpCore(operand);
-          //  dumpCore(0);
+
         }
     }
 
     public void multiplyX(int operand) {
-        //System.out.println("This is MultiX the operand is " + operand);
+
         accumulator *= memory[indexRegister];
         instructionCounter++;
-      // dumpCore(0);
+
         if (accumulator < -999999 || accumulator > 99999) {
-            accumulator = -1;
+            accumulator = -1; // Checking for overflow
             dumpCore(operand);
         }
     }
 
     public void inc() {
-       // System.out.println("This is INC");
+
         indexRegister++;
         instructionCounter++;
-        //dumpCore(0);
+
     }
 
     public void dec() {
-        //System.out.println("This is DEC");
+
         indexRegister--;
         instructionCounter++;
-        //dumpCore(0);
+
     }
 
     public void branch(int operand) {
-       // System.out.println("This is branch the operand is " + operand);
+
         instructionCounter = operand;
-       // dumpCore(0);
 
     }
 
     public void branchNEG(int operand) {
-//        System.out.println("This is branchNEG the operand is " + operand);
-//        System.out.println("Accumulator: " + accumulator);
-//        System.out.println("This is the IR" + indexRegister);
+
         if (accumulator < 0) {
             instructionCounter = operand;
         } else {
             instructionCounter++;
-           // dumpCore(0);
+
         }
     }
 
     public void branchZERO(int operand) {
-       // System.out.println("This is branchZERO the operand is " + operand);
+
         if (accumulator == 0) {
             instructionCounter = operand;
+
         } else {
             instructionCounter++;
-           // dumpCore(0);
+
         }
     }
 
     public void swap(int operand) {
-//        System.out.println("This is swap the operand is " + operand);
-//        System.out.println("Before swap: Accumulator = " + accumulator + ", IndexRegister = " + indexRegister);
+
         int temp = accumulator;
         accumulator = indexRegister;
         indexRegister = temp;
-//        System.out.println("After swap: Accumulator = " + accumulator + ", IndexRegister = " + indexRegister);
+
         instructionCounter++;
-       // dumpCore(0);
+
     }
 
     public void halt(int operand) {

@@ -6,7 +6,6 @@ package CS3790SimpletronV2;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.*;
 
 /**
  *
@@ -15,7 +14,7 @@ import java.util.*;
 public class CS3790SimpletronV2 {
 
     public static int[] memory = new int[10000];
-    
+
     public CS3790SimpletronV2() {
 
     }
@@ -46,7 +45,7 @@ public class CS3790SimpletronV2 {
                 String filename = input.nextLine().trim();
                 load_PRG_file(filename);
                 loading = false;
-                
+
             } else if (anwser.equals("N")) {
                 System.out.println("*** Please enter your program one instruction( or data word ) at a time        ***");
                 System.out.println("*** I will type the location number and a question mark (?). You then          ***");
@@ -81,7 +80,6 @@ takes in the input in as a string and convertes it to an int with Integer.parseI
                         memory[address] = Math.abs(sml_code);
                         address++;
                     } catch (NumberFormatException e) {
-                        // dumpCore(); 
 
                     }
 
@@ -118,28 +116,20 @@ takes in the input in as a string and convertes it to an int with Integer.parseI
 
             try {
                 int sml_code = Integer.parseInt(keys);
-                
+
                 memory[address] = Math.abs(sml_code);
                 address++;
             } catch (NumberFormatException e) {
-                //dumpCore(00000); 
 
             }
 
         }
-            // Debug: print loaded memory
-    for (int i = 0; i < address; i++) {
-        System.out.printf("Memory[%05d] = %06d\n", i, memory[i]);
-    }
 
-    print("Program loaded from keyboard input.");
     }
-
-  
 
     public static void main(String[] args) {
         CS3790SimpletronV2 SimpletronV2 = new CS3790SimpletronV2();
-        memory[1000]=1005;
+        memory[50] = 55;
         SimpletronV2.load_program();
         CPU cpu = new CPU();
         cpu.exeSML();
